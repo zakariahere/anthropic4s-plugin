@@ -1,0 +1,10 @@
+{
+  "name": "anthropic4s",
+  "version": "0.1.0",
+  "description": "Build Claude agents in Scala with anthropic4s: an API skill with compiled examples, an end-to-end agent scaffolder, a code reviewer agent, guard hooks and evals. Unofficial; not affiliated with Anthropic.",
+  "author": { "name": "Zakaria Bouazza", "url": "https://github.com/zakariahere" },
+  "homepage": "https://github.com/zakariahere/anthropic4s-plugin",
+  "repository": "https://github.com/zakariahere/anthropic4s-plugin",
+  "license": "Apache-2.0",
+  "keywords": ["scala", "claude-api", "anthropic4s", "agents", "cats-effect", "fs2", "play"]
+}

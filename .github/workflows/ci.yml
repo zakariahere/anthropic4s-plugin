@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  plugin:
+    name: Hooks, snippets and manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Hook tests
+        run: node --test test/hooks.test.mjs
+      - name: Skill snippets match verify/
+        run: node scripts/snippets.mjs --check
+      - name: Validate marketplace and plugin
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude plugin validate .
+          claude plugin validate ./plugins/anthropic4s
+
+  scala:
+    name: Snippets and template compile against anthropic4s
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: sbt/setup-sbt@v1
+      - name: verify/ (every snippet the skills quote)
+        working-directory: verify
+        run: sbt -batch test
+      - name: new-agent template
+        working-directory: plugins/anthropic4s/skills/new-agent/template
+        run: sbt -batch test

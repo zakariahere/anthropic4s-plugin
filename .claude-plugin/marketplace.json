@@ -1,0 +1,13 @@
+{
+  "name": "anthropic4s-plugin",
+  "owner": { "name": "Zakaria Bouazza", "url": "https://github.com/zakariahere" },
+  "description": "Claude Code plugin for building Claude agents in Scala with anthropic4s. Unofficial; not affiliated with Anthropic.",
+  "plugins": [
+    {
+      "name": "anthropic4s",
+      "source": "./plugins/anthropic4s",
+      "description": "anthropic4s API skill, agent scaffolder, reviewer agent, guard hooks and evals for Scala Claude agents.",
+      "category": "development"
+    }
+  ]
+}

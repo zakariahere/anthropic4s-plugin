@@ -1,0 +1,12 @@
+{
+  "name": "anthropic4s-plugin",
+  "private": true,
+  "type": "module",
+  "description": "Repository scripts; the plugin itself needs only Node to run its hooks.",
+  "scripts": {
+    "test": "node --test test/hooks.test.mjs",
+    "snippets": "node scripts/snippets.mjs",
+    "snippets:check": "node scripts/snippets.mjs --check",
+    "evals": "cd plugins/anthropic4s && claude plugin eval . --allow-tools Write Edit"
+  }
+}
