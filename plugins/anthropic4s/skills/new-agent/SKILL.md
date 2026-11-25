@@ -18,7 +18,9 @@ Ask only for what you cannot infer, and keep it to one short round:
 
 - **The job**: what one run takes in and what it returns.
 - **The tools**: what each one reads or changes. Mark every side effect (money, email, writes, deletes). Each
-  one gets an approval gate.
+  one gets an approval gate. A gate can ask a local decision model in milliseconds (did the user really ask for
+  this?) instead of a person; see `references/decision-models.md` of the `anthropic4s` skill, and make it fail
+  closed.
 - **Where it runs**: a command-line program (the default, which is this template) or inside a Play application
   (then follow `references/play.md` of the `anthropic4s` skill and use `FutureAnthropic` instead of `Main`).
 - **The model**: `Model.ClaudeOpus5_5` unless the user says otherwise. `Model.ClaudeHaiku5_5` suits cheap,
@@ -27,7 +29,7 @@ Ask only for what you cannot infer, and keep it to one short round:
 ## 2. Scaffold
 
 The template is the `template/` folder next to this SKILL.md. It is a complete sbt project that CI compiles and
-tests against anthropic4s 1.0.0:
+tests against anthropic4s 1.1.0:
 
 ```
 template/

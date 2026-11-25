@@ -1,7 +1,7 @@
 // Cheap, high-precision checks on a file Claude just wrote. They warn and never block: a false alarm costs one
 // sentence of context, and a missed one costs nothing that the reviewer agent will not catch later.
 
-// Model constants in anthropic4s 1.0.0 (Model.scala), id -> constant.
+// Model constants in anthropic4s 1.1.0 (Model.scala), id -> constant.
 export const MODEL_CONSTANTS = {
   'claude-fable-5-2': 'Model.ClaudeFable5_2',
   'claude-opus-5-5': 'Model.ClaudeOpus5_5',
@@ -35,9 +35,9 @@ export function check(filePath, text) {
 
   if (/\.sbt$/i.test(filePath) || /[\\/]project[\\/][^\\/]+\.scala$/i.test(filePath)) {
     const old = /"anthropic4s[\w-]*"\s*%\s*"(0\.[^"]*)"/.exec(text)
-    if (old) at(old.index, `anthropic4s ${old[1]} is a pre-release; 1.0.0 is on Maven Central and is what the anthropic4s skill documents.`)
+    if (old) at(old.index, `anthropic4s ${old[1]} is a pre-release; 1.1.0 is on Maven Central and is what the anthropic4s skill documents.`)
     const scala3 = /scalaVersion\s*:=\s*"3\./.exec(text)
-    if (scala3) at(scala3.index, 'anthropic4s 1.0.0 is published for Scala 2.13 only (Scala 3 is not supported yet).')
+    if (scala3) at(scala3.index, 'anthropic4s 1.1.0 is published for Scala 2.13 only (Scala 3 is not supported yet).')
     return warnings
   }
 
@@ -50,7 +50,7 @@ export function check(filePath, text) {
   for (const m of text.matchAll(/Model\.of\(\s*"([^"]+)"\s*\)/g)) {
     const constant = MODEL_CONSTANTS[m[1]]
     if (constant) at(m.index, `Model.of("${m[1]}") has a constant: ${constant}.`)
-    else if (m[1].startsWith('claude-')) at(m.index, `"${m[1]}" is not one of the model constants in anthropic4s 1.0.0 (${Object.values(MODEL_CONSTANTS).slice(0, 4).join(', ')}, ...). Make sure the id exists.`)
+    else if (m[1].startsWith('claude-')) at(m.index, `"${m[1]}" is not one of the model constants in anthropic4s 1.1.0 (${Object.values(MODEL_CONSTANTS).slice(0, 4).join(', ')}, ...). Make sure the id exists.`)
   }
 
   const unsafe = /\.unsafeRun(Sync|AndForget)\s*\(/.exec(text)

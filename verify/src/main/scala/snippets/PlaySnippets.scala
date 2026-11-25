@@ -81,3 +81,26 @@ class ChatController @Inject() (cc: ControllerComponents, claude: Claude, orders
     claude.anthropic.runTools(request(question), List(findOrder)).map(_.text)
   // snip:end
 }
+
+// snip:start play-decide
+import anthropic4s.decide.{DecideError, FutureDecide}
+import cats.syntax.all._ // for .tupled on batches
+import snippets.Triage.{team, urgency}
+
+@Singleton
+class TicketTriage @Inject() (lifecycle: ApplicationLifecycle)(implicit ec: ExecutionContext) {
+
+  // Reads DECIDE_BASE_URL, DECIDE_API_KEY and DECIDE_TIMEOUT, all optional (default: llama-server on :8081).
+  private val decide = FutureDecide.fromEnv()
+  lifecycle.addStopHook(() => decide.close())
+
+  def classify(ticket: String): Future[JsObject] =
+    decide
+      .run(ticket, (team.as("team"), urgency.as("urgency")).tupled) // one request, two typed answers
+      .map { case (t, u) =>
+        Json.obj("team" -> t.choice.toString, "urgency" -> u.mostLikely, "needsHuman" -> (t.confidence < 0.8))
+      }
+      // The decision model is a shortcut, not a dependency: if it is down, a human triages.
+      .recover { case e: DecideError => Json.obj("error" -> e.getMessage, "needsHuman" -> true) }
+}
+// snip:end
