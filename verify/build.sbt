@@ -4,7 +4,7 @@
 // `// snip:start NAME` ... `// snip:end` region into the Markdown block that names it, and `--check` fails CI
 // when the two disagree. Bump `anthropic4sVersion` when a new release ships, then fix whatever stops compiling.
 
-val anthropic4sVersion = "1.0.0"
+val anthropic4sVersion = "1.1.0"
 
 ThisBuild / scalaVersion := "2.13.18"
 ThisBuild / scalacOptions ++= Seq("-deprecation", "-feature", "-Xfatal-warnings")
@@ -17,6 +17,7 @@ lazy val verify = project
       "io.github.zakariahere" %% "anthropic4s"           % anthropic4sVersion,
       "io.github.zakariahere" %% "anthropic4s-play-json" % anthropic4sVersion,
       "io.github.zakariahere" %% "anthropic4s-otel4s"    % anthropic4sVersion,
+      "io.github.zakariahere" %% "anthropic4s-decide"    % anthropic4sVersion,
       "org.typelevel"         %% "otel4s-oteljava"       % "1.2.0",
       // Only the Play snippets need it; nothing here starts a Play application.
       "org.playframework"     %% "play"                  % "3.0.12" % Provided,

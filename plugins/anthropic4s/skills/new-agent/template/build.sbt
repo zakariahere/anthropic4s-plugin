@@ -1,4 +1,4 @@
-val anthropic4sVersion = "1.0.0"
+val anthropic4sVersion = "1.1.0"
 
 ThisBuild / scalaVersion := "2.13.18"
 ThisBuild / scalacOptions ++= Seq("-deprecation", "-feature")

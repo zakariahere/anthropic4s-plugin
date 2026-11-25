@@ -6,8 +6,8 @@ Kotlin runtime and no Jackson.
 
 ```scala
 libraryDependencies ++= Seq(
-  "io.github.zakariahere" %% "anthropic4s"           % "1.0.0",
-  "io.github.zakariahere" %% "anthropic4s-play-json" % "1.0.0" // only for structured outputs with Formats
+  "io.github.zakariahere" %% "anthropic4s"           % "1.1.0",
+  "io.github.zakariahere" %% "anthropic4s-play-json" % "1.1.0" // only for structured outputs with Formats
 )
 ```
 

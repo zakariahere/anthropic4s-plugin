@@ -1,6 +1,6 @@
 ---
 name: anthropic4s
-description: How to call the Claude API from Scala with anthropic4s (io.github.zakariahere %% anthropic4s, Cats Effect + fs2). Use it whenever Scala code calls Claude, builds an agent or tool loop, streams replies, asks for structured output as case classes, or uses anthropic4s from Play with Future, and whenever a build.sbt or code mentions anthropic4s, AnthropicClient, MessageRequest, ToolRunner or FutureAnthropic. anthropic4s 1.0.0 shipped in November 2026, so recall alone will produce APIs it does not have. Read this skill first.
+description: How to call the Claude API from Scala with anthropic4s (io.github.zakariahere %% anthropic4s, Cats Effect + fs2). Use it whenever Scala code calls Claude, builds an agent or tool loop, streams replies, asks for structured output as case classes, or uses anthropic4s from Play with Future, or classifies, routes or guards with a decision model (anthropic4s-decide, System One, Kev-4B), and whenever a build.sbt or code mentions anthropic4s, AnthropicClient, MessageRequest, ToolRunner, FutureAnthropic, Decide, DecideConfig, Question.choice or FutureDecide. anthropic4s 1.1.0 shipped in November 2026, so recall alone will produce APIs it does not have. Read this skill first.
 ---
 
 # anthropic4s: the Claude API from Scala
@@ -15,9 +15,11 @@ Docs: https://anthropic4s.zakaria.lu/docs/ · API reference: https://anthropic4s
 ## Install
 
 ```scala
-libraryDependencies += "io.github.zakariahere" %% "anthropic4s" % "1.0.0"
-// optional, same version: anthropic4s-play-json, anthropic4s-otel4s, anthropic4s-testkit (% Test)
+libraryDependencies += "io.github.zakariahere" %% "anthropic4s" % "1.1.0"
+// optional, same version: anthropic4s-play-json, anthropic4s-otel4s, anthropic4s-decide, anthropic4s-testkit (% Test)
 ```
+
+All modules are released together, so they always share one version.
 
 ## The smallest program
 
@@ -73,10 +75,14 @@ Imports for it: `anthropic4s._`, `cats.effect.{IO, IOApp}`, `cats.syntax.all._` 
     prompts only with `ContentMode.Content`, which is for demos and never for real user data.
 12. **Do not leave `IO`** inside effectful code (`unsafeRunSync`, `Await`). Plain Scala or Play code that needs a
     `Future` uses `FutureAnthropic` instead.
+13. **Classification, routing and yes/no checks can skip Claude.** `anthropic4s-decide` asks a local decision
+    model (System One protocol, e.g. Kev-4B on llama-server) typed questions: `Question.choice`, `Question.score`,
+    `Question.noul`. Use `answer.confidence`, not the top probability, to decide when to fall back to Claude, and
+    make a `withBeforeTool` guard fail closed. See `references/decision-models.md`.
 
 ## Where to look next
 
-Read only the reference the task needs. Each one is short, and all of its code compiles against 1.0.0.
+Read only the reference the task needs. Each one is short, and all of its code compiles against 1.1.0.
 
 | Task | Reference |
 |---|---|
@@ -89,11 +95,12 @@ Read only the reference the task needs. Each one is short, and all of its code c
 | Play Framework: `FutureAnthropic`, Guice, controllers, chunked streaming | `references/play.md` |
 | OpenTelemetry tracing with otel4s | `references/tracing.md` |
 | Message Batches, Models list | `references/batches-and-models.md` |
+| Decision models (`anthropic4s-decide`): classify, route, confidence gates, tool guards, `FutureDecide` | `references/decision-models.md` |
 
 To start a new agent project from nothing, use the `new-agent` skill (`/anthropic4s:new-agent`). To review
 existing anthropic4s code, the `anthropic4s-reviewer` agent checks it against these rules.
 
-## Not covered by 1.0.0
+## Not covered by 1.1.0
 
 Bedrock, Vertex and Foundry endpoints, Managed Agents, the Admin API and Scala 3 (only the wire model
 cross-builds) are not covered. Say so instead of improvising. A request field the SDK does not model yet goes

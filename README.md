@@ -6,7 +6,7 @@ A Claude Code plugin that teaches Claude to build Claude agents in **Scala** wit
 > **Unofficial.** anthropic4s and this plugin are community projects. They are not affiliated with or endorsed by
 > Anthropic.
 
-anthropic4s 1.0.0 shipped in November 2026, after current models were trained. Without help, a model writes
+anthropic4s 1.1.0 shipped in November 2026, after current models were trained. Without help, a model writes
 the official Java SDK's builders, or methods that do not exist. With this plugin installed, Claude knows the real
 API, follows its rules, and can take an agent from an empty folder to a tested project.
 
@@ -26,11 +26,11 @@ From a shell: `claude plugin marketplace add zakariahere/anthropic4s-plugin`, th
 
 | Component | What it does |
 |---|---|
-| Skill `anthropic4s` | Loads whenever Scala code talks to Claude. It holds twelve rules that recall gets wrong, plus nine short references: requests, streaming, structured outputs, tools and agents, errors and configuration, testing, Play, tracing, batches. |
+| Skill `anthropic4s` | Loads whenever Scala code talks to Claude. It holds thirteen rules that recall gets wrong, plus ten short references: requests, streaming, structured outputs, tools and agents, errors and configuration, testing, Play, tracing, batches, and decision models (`anthropic4s-decide`: classify, route and guard tools with a local System One model). |
 | Skill `new-agent` (`/anthropic4s:new-agent <what it should do>`) | The end-to-end path: pin down the job and tools, scaffold an sbt project, write typed tools and the agent loop, test it with `ScriptedModel`, then optionally run it for real and trace it. |
-| Agent `anthropic4s-reviewer` | A read-only review of anthropic4s code: client lifecycle, streaming limits, hand-rolled loops, ungated side effects, secrets, blocking, testability. |
+| Agent `anthropic4s-reviewer` | A read-only review of anthropic4s code: client lifecycle, streaming limits, hand-rolled loops, ungated side effects, secrets, blocking, testability, and decision-model guards that fail open. |
 | Hooks | `SessionStart` notes when the project depends on anthropic4s. After each edit, `PostToolUse` warns (never blocks) on API key literals, `temperature`/`top_p`/`top_k`, a model id that has a constant, `unsafeRunSync`, content tracing, large non-streaming requests, and mixing in the Java SDK. Node only, so they run on macOS, Linux and Windows. |
-| Evals | Six `claude plugin eval` cases: a first program, a support agent with a refund gate and tests, a long streamed report, Play with structured output, a review of planted bugs, and a check that the skill stays out of Python work. |
+| Evals | Seven `claude plugin eval` cases: a first program, a support agent with a refund gate and tests, a long streamed report, Play with structured output, a ticket router on a decision model with Claude as the fallback, a review of planted bugs, and a check that the skill stays out of Python work. |
 
 ## Why you can trust the examples
 
@@ -53,7 +53,7 @@ To try the plugin from a checkout without installing it: `claude --plugin-dir ./
 
 ### Evals
 
-The cases write files, so grant `Write` and `Edit`. A full run is 6 cases × 3 runs × 2 arms (with and without
+The cases write files, so grant `Write` and `Edit`. A full run is 7 cases × 3 runs × 2 arms (with and without
 the plugin) and spends real tokens:
 
 ```

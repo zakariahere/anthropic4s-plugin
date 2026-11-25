@@ -13,7 +13,8 @@ APIs from it.
 
 ## How to work
 
-1. Find the code: `Grep` for `anthropic4s`, `MessageRequest`, `toolRunner`, `FutureAnthropic` and `Tool(`. Read
+1. Find the code: `Grep` for `anthropic4s`, `MessageRequest`, `toolRunner`, `FutureAnthropic`, `Tool(`, `Decide`
+   and `Question.`. Read
    those files and the build (`build.sbt`, `project/*.scala`).
 2. Check each item below. Report only what you can point to in the code. Do not report style preferences.
 3. For every finding, give `path:line`, the rule, why it matters in one sentence, and the fix as a short code
@@ -61,6 +62,18 @@ APIs from it.
 - `parse` without handling `AnthropicError.OutputParse` where a refusal is plausible.
 - Play JSON `Format`s for parsed types missing `implicit val config = PlaySchema.configuration`, or sealed trait
   cases declared inside the companion that calls `Json.format`.
+
+**Decision models (`anthropic4s-decide`)**
+- A `Decide` (`Decide.ember`) or `FutureDecide` built per request. One per application, like the Claude client;
+  with anthropic4s present, `Decide.fromClient(http, config)` can share its HTTP client.
+- A `FutureDecide` that is never closed.
+- A `withBeforeTool` guard that allows the call when the decision model fails. It must fail closed
+  (`handleError(_ => ToolDecision.Deny(...))`).
+- `DecideError` not handled where the model can be down: `Unavailable`, `Timeout` and `Http` are runtime
+  conditions; `InvalidQuestion` and `Decode` are bugs.
+- A gate on the top probability (`answer.probabilities(...)`) instead of `answer.confidence`, or one threshold
+  reused across questions with different numbers of options.
+- An endpoint or API key literal instead of `DecideConfig.fromEnv` or configuration.
 
 **Security and privacy**
 - An API key literal (`sk-ant-...`), or a key read from anywhere committed to the repo.
